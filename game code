@@ -1,0 +1,122 @@
+import time
+import random
+
+class Human:
+    def __init__(self, name):
+        self.name = name
+        self.energy = 100
+        self.hydration = 100
+        self.rest = 100
+        self.health = 100
+        self.muscle = 0
+        self.fitness = 0
+        
+    def drink_juice(self):
+        self.energy += 20
+        self.hydration += 10
+        
+    def drink_coffee(self):
+        self.energy += 10
+        self.hydration -= 5
+        
+    def eat_food(self):
+        self.energy += 30
+        self.hydration += 10
+        
+    def workout(self):
+        self.energy -= 30
+        self.rest -= 10
+        self.hydration -= 20
+        self.muscle += 5
+        self.fitness += 2
+        
+    def sleep(self):
+        self.rest += 50
+        self.energy += 20
+        
+class MiniGame:
+    def __init__(self, human):
+        self.human = human
+    
+    def start(self):
+        pass
+    
+    def stop(self):
+        pass
+    
+    def update_stats(self):
+        pass
+    
+class ReactionTimeGame(MiniGame):
+    def __init__(self, human):
+        super().__init__(human)
+        self.reaction_time = None
+        
+    def start(self):
+        print("Get ready...")
+        time.sleep(2)
+        print("Go!")
+        start_time = time.time()
+        input("Press Enter as quickly as you can!")
+        end_time = time.time()
+        self.reaction_time = end_time - start_time
+        print(f"Your reaction time was {self.reaction_time:.2f} seconds.")
+        
+    def update_stats(self):
+        if self.reaction_time is not None:
+            self.human.energy -= 10
+            self.human.health -= int(self.reaction_time * 10)
+    
+class MemoryGame(MiniGame):
+    def __init__(self, human):
+        super().__init__(human)
+        self.sequence = []
+        self.player_sequence = []
+        
+    def start(self):
+        print("Memorize the sequence:")
+        for i in range(5):
+            num = random.randint(1, 4)
+            self.sequence.append(num)
+            print(num, end=" ", flush=True)
+            time.sleep(1)
+        print()
+        input("Press Enter to continue.")
+        print("Repeat the sequence:")
+        for num in self.sequence:
+            player_num = None
+            while player_num is None:
+                try:
+                    player_num = int(input("> "))
+                    if player_num not in [1, 2, 3, 4]:
+                        print("Invalid input, please try again.")
+                        player_num = None
+                    else:
+                        self.player_sequence.append(player_num)
+                except ValueError:
+                    print("Invalid input, please try again.")
+        if self.sequence == self.player_sequence:
+            print("Congratulations, you got it right!")
+        else:
+            print("Sorry, you got it wrong.")
+        
+    def update_stats(self):
+        if self.sequence == self.player_sequence:
+            self.human.energy += 10
+            self.human.health += 10
+        else:
+            self.human.energy -= 10
+            self.human.health -= 10
+            
+class RhythmGame(MiniGame):
+    def __init__(self, human):
+        super().__init__(human)
+        self.score = 0
+        
+    def start(self):
+        print("Press the arrow keys in time with the music!")
+        time.sleep(2)
+        while True:
+            pass
+    
+class ReflexGame(MiniGame
